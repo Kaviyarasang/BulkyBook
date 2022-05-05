@@ -1,6 +1,6 @@
 ﻿@model Category
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -24,16 +24,9 @@
 
        </div>
 
-       <button type="submit" class="btn btn-primary" style="width:150px" >Create</button>
+       <button type="submit" class="btn btn-primary" style="width:150px" >Update</button>
        <a asp-controller="Category" asp-action="Index" class="btn btn-secondary" style="width:100px">Back</a>
-
-       <div asp-validation-summary="All"></div>
 
    </div>
 </form>
 
-@section Scripts{
-    <partial name="_ValidationScriptsPartial">
-
-    </partial>
-}

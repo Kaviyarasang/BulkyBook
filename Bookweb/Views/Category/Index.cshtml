@@ -4,6 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<partial name="_Notifications"></partial>
+
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-6">
@@ -37,6 +39,12 @@
          <th>
             Display order
         </th>
+        <th>
+
+        </th>
+                <th>
+
+        </th>
     </tr> 
     </thead> 
 
@@ -47,9 +55,21 @@
                <td width:50%>
                  @obj.Name
                </td>
-               <td width:50%>
+               <td width:30%>
                  @obj.Displayorder
                </td>
+               <td class="w-25" role="group" >
+                   <a asp-controller="Category" asp-action="Edit" asp-route-Id=@obj.Id><i class="bi bi-pencil-square" class="btn btn-primary mx-2"></i>
+                       Edit
+                   </a>
+               </td>
+
+               <td class="w-25" role="group" >
+                   <a asp-controller="Category" asp-action="Delete" asp-route-Id=@obj.Id><i class="bi bi-trash3-fill" class="btn btn-danger mx-2"></i>
+                       Delete
+                   </a>
+               </td>
+
            </tr> 
         }
     </tbody>
