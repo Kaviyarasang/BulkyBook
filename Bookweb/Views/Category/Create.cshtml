@@ -1,4 +1,4 @@
-﻿@model Category
+﻿@model Book.Models.Category
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -33,7 +33,7 @@
 </form>
 
 @section Scripts{
-    <partial name="_ValidationScriptsPartial">
+   @{ <partial name="_ValidationScriptsPartial">
 
-    </partial>
+    </partial>}
 }
