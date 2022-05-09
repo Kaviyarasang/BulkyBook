@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Book.Models.CoverType>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<partial name="_Notifications"></partial>
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">
+                CoverType List
+            </h2>
+     </div>
+
+     <div  class="col-6 text-end">
+
+    <a asp-controller="CoverType" asp-action="Create" class="btn btn-primary">
+    <i class="bi bi-file-earmark-plus"></i>&nbsp; New CoverType
+    </a>
+    </div>
+    </div>
+
+    <br />
+    <br />
+
+
+
+
+<h1>Index-CoverType</h1>
+<table class="table table-bordered table-striped" style="width:100%">
+    <thead> 
+
+    <tr> 
+        <th>
+            CoverType Name
+        </th>
+
+    </tr> 
+    </thead> 
+
+    <tbody>
+        @foreach (var obj in Model)
+        {
+           <tr>
+               <td width:50%>
+                 @obj.Name
+               </td>
+
+               <td class="w-25" role="group" >
+                   <a asp-controller="CoverType" asp-action="Edit" asp-route-Id=@obj.Id><i class="bi bi-pencil-square" class="btn btn-primary mx-2"></i>
+                       Edit
+                   </a>
+               </td>
+
+               <td class="w-25" role="group" >
+                   <a asp-controller="CoverType" asp-action="Delete" asp-route-Id=@obj.Id><i class="bi bi-trash3-fill" class="btn btn-danger mx-2"></i>
+                       Delete
+                   </a>
+               </td>
+
+           </tr> 
+        }
+    </tbody>
+    </table>
+    </div>

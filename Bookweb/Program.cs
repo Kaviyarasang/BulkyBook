@@ -1,4 +1,6 @@
 using Book.Dataaccess;
+using Book.Dataaccess.Repository;
+using Book.Dataaccess.Repository.IRepository;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +11,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbcontext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("Defaultconnection")));
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+//builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IUnitofWork, UnitofWork>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,6 +34,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
