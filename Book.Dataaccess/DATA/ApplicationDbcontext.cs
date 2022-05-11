@@ -1,10 +1,11 @@
 ﻿
 using Book.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Book.Dataaccess
 {
-    public class ApplicationDbcontext:DbContext
+    public class ApplicationDbcontext:IdentityDbContext
     {
         public ApplicationDbcontext(DbContextOptions<ApplicationDbcontext> options):base(options)
         {

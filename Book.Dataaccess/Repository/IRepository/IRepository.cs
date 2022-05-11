@@ -9,8 +9,8 @@ namespace Book.Dataaccess.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {
-        T GetFirstorDefault(Expression<Func<T, bool>> filter);
-        IEnumerable<T> GetAll();
+        T GetFirstorDefault(Expression<Func<T, bool>> filter,string? IncludeProperties = null);
+        IEnumerable<T> GetAll(string? IncludeProperties = null);
         void Add(T Entity);
         void Remove(T Entity);  
         void Removerange(IEnumerable<T> entities);

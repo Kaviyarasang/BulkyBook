@@ -25,16 +25,30 @@ namespace Book.Dataaccess.Repository
             dbset.Add(Entity);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbset;
+            if(includeProperties != null)
+            {
+                foreach(var property in includeProperties.Split(new char[] {','},StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);    
+                }
+            }
             return query.ToList();
         }
 
-        public T GetFirstorDefault(Expression<Func<T, bool>> filter)
+        public T GetFirstorDefault(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbset;
             query = query.Where(filter);
+            if (includeProperties != null)
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.FirstOrDefault();
         }
 

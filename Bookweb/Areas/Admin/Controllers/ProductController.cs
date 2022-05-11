@@ -23,7 +23,6 @@ namespace Bookweb.Controllers
             IEnumerable<Product> ObjProductlist = _unitofwork.Product.GetAll();
             return View(ObjProductlist);
         }
-        //GET
        
         //GET
         public IActionResult Upsert(int? Id)
@@ -46,8 +45,6 @@ namespace Bookweb.Controllers
 
             };
 
-
-
             if (Id==null||Id==0)
             {
                 return View(productVM);
@@ -55,10 +52,11 @@ namespace Bookweb.Controllers
             }
             else
             {
-
+                productVM.Product = _unitofwork.Product.GetFirstorDefault(u=>u.Id==Id);
+                return View(productVM);
             }
 
-            return View(productVM);
+            
         }
 
         //POST
@@ -77,6 +75,16 @@ namespace Bookweb.Controllers
                     string filename=Guid.NewGuid().ToString();
                     var extension=Path.GetExtension(file.FileName);
 
+                    if(Obj.Product.ImageUrl!=null)
+                    {
+                        var imagepath= Path.Combine(wwwRoothPath, Obj.Product.ImageUrl.Trim('\\'));
+                        if(System.IO.File.Exists(imagepath))
+                        {
+                            System.IO.File.Delete(imagepath);
+                        }
+                    }
+                    
+
                     using (var filestreams = new FileStream(Path.Combine(uploads, filename + extension), FileMode.Create))
                     {
                         file.CopyTo(filestreams);
@@ -84,8 +92,16 @@ namespace Bookweb.Controllers
                     Obj.Product.ImageUrl = @"images\products" + filename + extension;
                 }
 
+                if(Obj.Product.Id==0)
+                {
+                    _unitofwork.Product.Add(Obj.Product);
+                }
+                else
+                {
+                    _unitofwork.Product.Update(Obj.Product);
+                }
 
-                _unitofwork.Product.Add(Obj.Product);
+                
                 _unitofwork.Save();
                 TempData["Success"] = "Sucess";
                 return RedirectToAction("Index");
@@ -93,37 +109,38 @@ namespace Bookweb.Controllers
             return View(Obj);
         }
 
-        //GET
-        public IActionResult Delete(int? Id)
-        {
-            if (Id == null || Id == 0)
-                return NotFound();
-            //var obj = _db.Categories.FirstOrDefault(c => c.Id == Id);
-            var Obj = _unitofwork.Product.GetFirstorDefault(c => c.Id == Id);
-            return View(Obj);
-        }
 
         //POST
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeletePOST(int? Id)
-        {
-            var Obj = _unitofwork.Product.GetFirstorDefault(c => c.Id == Id);
-            _unitofwork.Product.Remove(Obj);
-                _unitofwork.Save();
-                TempData["Success"] = "Sucess";
-                return RedirectToAction("Index");
-             
-        }
-
         #region APICALLS
+
         [HttpGet]
         public IActionResult GetAll()
         {
-            var productlist = _unitofwork.Product.GetAll();
+            var productlist = _unitofwork.Product.GetAll(IncludeProperties:"Category,CoverType");
 
             return Json(new { data = productlist });
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int? id)
+        {
+            var obj = _unitofwork.Product.GetFirstorDefault(u => u.Id == id);
+            if (obj == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+
+            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, obj.ImageUrl.TrimStart('\\'));
+            if (System.IO.File.Exists(oldImagePath))
+            {
+                System.IO.File.Delete(oldImagePath);
+            }
+
+            _unitofwork.Product.Remove(obj);
+            _unitofwork.Save();
+            return Json(new { success = true, message = "Delete Successful" });
+
         }
 
         #endregion
