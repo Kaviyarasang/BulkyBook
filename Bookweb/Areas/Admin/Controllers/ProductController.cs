@@ -122,7 +122,8 @@ namespace Bookweb.Controllers
         public IActionResult GetAll()
         {
             var productlist = _unitofwork.Product.GetAll();
-            return Json(new { data = "productlist" });
+
+            return Json(new { data = productlist });
         }
 
         #endregion
